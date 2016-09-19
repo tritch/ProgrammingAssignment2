@@ -12,7 +12,7 @@
 
 ##  Function makeCacheMatrix() - creates a data structure with function calls that may be called on the 'x' object
 ##  and a reference to `inv`, which points to a previously inverted matrix result or to NULL if the latter nonexistent.
-##  Argument:  x, reference to an invertible square matrix;  no checking is performed:  'x' is square? 'x' is singular?
+##  Argument:  `x`, reference to an invertible square matrix;  no checking is performed:  'x' is square? 'x' is singular?
 ##  Returns:  list of references to public functions set_m(), get_m(), setInv_m(), getInv_m()
 ##	set_m():  sets value of invertible square matrix
 ##	get_m():  gets value of invertible square matrix
@@ -36,9 +36,9 @@ makeCacheMatrix <- function(x = matrix()) {
 ##  Function cacheSolve() - returns a reference to an inverted matrix depending upon state of the `inv` variable.
 ##  Either the cached copy is returned, or if not previously cached, calculated with solve().  In the latter case, the
 ##  `inv` reference is updated with the inverted matrix to improve performance of subsequent calls.
-##  Argument:  x, reference to object returned by makeCacheMatrix().  See description above.
+##  Argument:  `x`, reference to object returned by makeCacheMatrix().  See description above.
 ##  Returns:  reference to inverted matrix
-
+##
 cacheSolve <- function(x, ...) {
 	inv <- x$getInv()
 	# if inv not NULL, return from cache and exit
@@ -51,8 +51,17 @@ cacheSolve <- function(x, ...) {
 	x$setInv( inv ) # set and return inverse
 	return ( inv )
 }
-#
-# Test function
+##
+##  Function test() - if `benchmark`=FALSE, returns original matrix, inverted matrix, and inverted inverted matrix
+##  for comparison w/ original.  This is the default mode.
+##  
+##  Benchmark mode is enabled when invoked with `benchmark`=TRUE.  User time to calculate the inverted matrix
+##  is calculated, and the user time to return a reference to the cached version (usually = 0.0) are displayed to
+##  indicate the performance gain associated with the cache.
+##
+##  Other argument:  `nrow` defaults to the value 6, which creates a 6 X 6 square matrix filled with random
+##  values.
+##  To use in benchmark mode, author suggests large arrays for testing, ie nrow=1000 for 1000 X 1000 matrix.
 #
 test <- function( nrow=6, benchmark=FALSE) {
 	# generate square matrix with random values
